@@ -10,6 +10,7 @@ RUN pip install -r requirements.txt
 
 COPY .. .
 RUN chown ugc:ugc -R /ugc
+RUN chmod +x ./wait-for-it.sh
 
 USER ugc
-CMD python3 main.py
+CMD ["./wait-for-it.sh", "kafka:9092", "--", "python3", "main.py"]
