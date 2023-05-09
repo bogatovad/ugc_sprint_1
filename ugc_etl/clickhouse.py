@@ -13,28 +13,26 @@ def init_clickhouse_db(client):
 
     client.execute(
         """CREATE TABLE IF NOT EXISTS cinema_analytics.movie_views ON CLUSTER company_cluster(
-        id Int64,
         user_id String,
-        film_id String,
-        movie_timestamp Int64         
+        movie_id String,
+        viewed_seconds Int64         
         )
         Engine=MergeTree()
-        ORDER BY movie_timestamp"""
+        ORDER BY viewed_seconds"""
     )
 
 
 def create_kafka_integration(client):
     client.execute(
         """CREATE TABLE IF NOT EXISTS cinema_analytics.kafka_movie_views(
-            id Int64,
             user_id String,
-            film_id String,
-            movie_timestamp Int64
+            movie_id String,
+            viewed_seconds Int64
             )
             ENGINE = Kafka 
             SETTINGS
-            kafka_broker_list = 'broker:29092',
-            kafka_topic_list = 'film_views',
+            kafka_broker_list = 'kafka:9092',
+            kafka_topic_list = 'view_progress',
             kafka_group_name = 'clickhouse_reader',
             kafka_format = 'JSONEachRow',
             kafka_num_consumers = 1;"""
