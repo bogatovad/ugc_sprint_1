@@ -1,13 +1,10 @@
 version: '3'
 
-networks:
-  ugc_test:
-    driver: bridge
-
 services:
-  zookeeper:
+  # Kafka
+  zookeeper-kafka:
     image: wurstmeister/zookeeper
-    container_name: zookeeper
+    container_name: zookeeper-kafka
     ports:
       - "2181:2181"
 
@@ -20,12 +17,67 @@ services:
       - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper-kafka:2181'
       KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://localhost:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CREATE_TOPICS: "view_progress:1:1"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "local"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
+      KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper-kafka:2181"
+
+# Clickhouse
+  zookeeper-click:
+    image: zookeeper:3.5
+    container_name: zookeeper-click
+    hostname: zookeeper-click
+
+  clickhouse-node1:
+    image: yandex/clickhouse-server:20.4
+    container_name: clickhouse-node1
+    hostname: clickhouse-node1
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./clickhouse/data/node1:/etc/clickhouse-server
+    depends_on:
+      - zookeeper-click
+
+  clickhouse-node2:
+    image: yandex/clickhouse-server:20.4
+    container_name: clickhouse-node2
+    hostname: clickhouse-node2
+    volumes:
+      - ./clickhouse/data/node2:/etc/clickhouse-server
+    depends_on:
+      - zookeeper-click
+
+  clickhouse-node3:
+    image: yandex/clickhouse-server:20.4
+    container_name: clickhouse-node3
+    hostname: clickhouse-node3
+    volumes:
+      - ./clickhouse/data/node3:/etc/clickhouse-server
+    depends_on:
+      - zookeeper-click
+
+  clickhouse-node4:
+    image: yandex/clickhouse-server:20.4
+    container_name: clickhouse-node4
+    hostname: clickhouse-node4
+    volumes:
+      - ./clickhouse/data/node4:/etc/clickhouse-server
+    depends_on:
+      - zookeeper-click
 
   fastapi:
     build: src
@@ -40,13 +92,3 @@ services:
       - ./src:/ugc
     expose:
       - 8000
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui
-    container_name: kafka-ui
-    ports:
-      - "8080:8080"
-    environment:
-      KAFKA_CLUSTERS_0_NAME: "local"
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
-      KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
