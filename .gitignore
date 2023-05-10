@@ -156,3 +156,6 @@ static/
 .idea/
 /.idea/*
 .local
+.idea/
+/.idea/*
+.local
