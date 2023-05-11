@@ -15,6 +15,15 @@ app = FastAPI(
 )
 
 
+@app.on_event('startup')
+def start_producer():
+    producer.start()
+
+
+@app.on_event('shutdown')
+def stop_producer():
+    producer.stop()
+
 app.include_router(router, prefix='/api/v1', tags=['views'])
 
 if __name__ == '__main__':

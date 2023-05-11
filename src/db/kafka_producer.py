@@ -12,6 +12,11 @@ class UGCKafkaProducer:
     def send(self, key, value):
         self.producer.send(self.topic, key=key, value=value)
 
+    def start(self):
+        self.producer._wait_on_metadata(self.topic, max_wait=120)
+
+    def stop(self):
+        self.producer.close()
 
 producer = UGCKafkaProducer()
 
