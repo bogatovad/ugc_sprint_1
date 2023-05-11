@@ -23,15 +23,15 @@ def init_clickhouse_db(client):
 
 
     client.execute(
-        """CREATE TABLE IF NOT EXISTS cinema_analytics.kafka_movie_views(
+        f"""CREATE TABLE IF NOT EXISTS cinema_analytics.kafka_movie_views(
             user_id String,
             movie_id String,
             movie_timestamp Int64
             )
             ENGINE = Kafka 
             SETTINGS
-            kafka_broker_list = 'kafka:9092',
-            kafka_topic_list = 'view_progress',
+            kafka_broker_list = '{settings.kafka_host}:{settings.kafka_port}',
+            kafka_topic_list = '{settings.topic_list}',
             kafka_group_name = 'clickhouse_reader',
             kafka_format = 'JSONEachRow',
             kafka_num_consumers = 1;"""
