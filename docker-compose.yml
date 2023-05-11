@@ -92,3 +92,17 @@ services:
       - ./src:/ugc
     expose:
       - 8000
+
+  ugc_etl:
+    build: ugc_etl
+    container_name: ugc_etl
+    depends_on:
+      - kafka
+      - clickhouse-node1
+      - clickhouse-node2
+      - clickhouse-node3
+      - clickhouse-node4
+    env_file:
+     - ugc_etl/.env
+    #  KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
