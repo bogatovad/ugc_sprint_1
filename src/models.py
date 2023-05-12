@@ -14,4 +14,3 @@ class ViewProgress(BaseModel):
     @property
     def id(self):
         return f'{self.user_id}:{self.movie_id}'.encode()
-

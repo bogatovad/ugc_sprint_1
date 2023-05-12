@@ -1,7 +1,5 @@
 from clickhouse_driver import Client
-
 from config import settings
-
 
 client = Client(host=settings.clickhouse_host)
 
@@ -15,12 +13,11 @@ def init_clickhouse_db(client):
         """CREATE TABLE IF NOT EXISTS cinema_analytics.movie_views ON CLUSTER company_cluster(
         user_id String,
         movie_id String,
-        movie_timestamp Int64         
+        movie_timestamp Int64
         )
         Engine=MergeTree()
         ORDER BY movie_timestamp"""
     )
-
 
     client.execute(
         f"""CREATE TABLE IF NOT EXISTS cinema_analytics.kafka_movie_views(
@@ -28,7 +25,7 @@ def init_clickhouse_db(client):
             movie_id String,
             movie_timestamp Int64
             )
-            ENGINE = Kafka 
+            ENGINE = Kafka
             SETTINGS
             kafka_broker_list = '{settings.kafka_host}:{settings.kafka_port}',
             kafka_topic_list = '{settings.topic_list}',
@@ -42,7 +39,6 @@ def init_clickhouse_db(client):
             SELECT * FROM cinema_analytics.kafka_movie_views;"""
     )
 
-   
 
 if __name__ == '__main__':
     init_clickhouse_db(client=client)
