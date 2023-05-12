@@ -86,8 +86,8 @@ services:
       - "8000:8000"
     depends_on:
       - kafka
-    environment:
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    env_file:
+     - envs/.env
     volumes:
       - ./src:/ugc
     expose:
@@ -104,6 +104,6 @@ services:
       - clickhouse-node4
     restart: on-failure
     env_file:
-     - ugc_etl/.env
+     - envs/.env
 
 

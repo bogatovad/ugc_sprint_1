@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     topic_list: str = Field('view_progress', env='topic_list') 
 
     class Config:
-        env_file = ".env"
+        env_file = "envs/.env"
 
 
 settings = Settings()

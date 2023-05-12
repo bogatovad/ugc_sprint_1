@@ -9,7 +9,7 @@ class UGCKafkaProducer:
         self.topic = 'view_progress'# TODO move to settings
         self.producer = KafkaProducer(bootstrap_servers=self.hosts)
 
-    def send(self, key, value):
+    def send(self, key: str, value: str):
         self.producer.send(self.topic, key=key, value=value)
 
     def start(self):
