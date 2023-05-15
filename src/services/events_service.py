@@ -11,6 +11,7 @@ from fastapi import Depends
 
 
 class EventService:
+    """Сервис для записи событий в Kafka"""
     def __init__(self, kafka_producer: AIOKafkaProducer):
         self.producer = kafka_producer
 
@@ -30,11 +31,8 @@ class EventService:
 
     @staticmethod   
     def _get_key(event):
-        if event.movie_id:
-            key = f'{event.user_id}:{event.movie_id}'
-        else:
-            key = event.user_id
-        return key
+        key = f'{event.user_id}:{event.movie_id}' if event.movie_id else event.user_id
+ 
     
     def _get_topic(self, event):
         topic = event.type
