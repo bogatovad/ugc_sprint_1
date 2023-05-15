@@ -1,16 +1,18 @@
-from fastapi import APIRouter, HTTPException
-from db.kafka_producer import producer
-from models import ViewProgress
+from http import HTTPStatus
+from fastapi import APIRouter, Depends, Request
 
+
+from models import Event
+from services.events_service import EventService, get_events_service
 
 router = APIRouter()
 
 
-@router.post("/progress")
-async def write_view_progress(view_progress: ViewProgress):
-    try:
-        # Serialize the data to JSON and send it to Kafka
-        producer.send(key=view_progress.id, value=view_progress.json().encode('utf-8'))
-        return {"message": "View progress written to Kafka."}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+@router.post('/view_progress')
+async def post_view_progress(
+    request: Request,
+    event: Event,
+    service:EventService = Depends(get_events_service)
+):
+    await service.send_event(event)
+    return HTTPStatus.CREATED

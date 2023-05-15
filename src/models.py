@@ -1,17 +1,17 @@
-from pydantic import BaseModel
+from datetime import datetime
+from pydantic import BaseModel, Field
 
 
-class ViewHistory(BaseModel):
-    user_id: str
-    movie_id: str
+class Event(BaseModel):
+    user_id: str = Field(..., description='ID пользователя, от которого получено событие')
+    type: str = Field(..., description='Тип события', example='view_progress')
+    movie_id: str | None = Field(..., description='ID фильма')
+    movie_timestamp: int | None = Field(..., description='Отсмотренный фрейм')
 
 
-class ViewProgress(BaseModel):
-    user_id: str
-    movie_id: str
-    movie_timestamp: int
+class EventPosted(Event):
+    created_at: str = Field(default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    @property
-    def id(self):
-        return f'{self.user_id}:{self.movie_id}'.encode()
+
+
 
