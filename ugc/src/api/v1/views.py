@@ -14,7 +14,7 @@ router = APIRouter()
 async def post_view_progress(
     request: Request,
     event: Event,
-    service:EventService = Depends(get_events_service)
+    service: EventService = Depends(get_events_service)
 ):
     await service.send_event(event)
     return HTTPStatus.CREATED
