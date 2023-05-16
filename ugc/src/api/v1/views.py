@@ -9,8 +9,8 @@ router = APIRouter()
 
 
 @router.post(
-    '/view_progress,',
-     description="Получение данных о времени просмотра фильма.",
+    '/view_progress',
+    description="Получение данных о времени просмотра фильма.",
 )
 async def post_view_progress(
     request: Request,

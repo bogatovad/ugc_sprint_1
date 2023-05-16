@@ -82,7 +82,7 @@ services:
       - zookeeper-click
 
   ugc_api:
-    build: src
+    build: ugc
     container_name: ugc_api
     ports:
       - "8000:8000"
@@ -90,8 +90,8 @@ services:
       - kafka
     env_file:
      - envs/.env
-    volumes:
-      - ./src:/ugc
+    #volumes:
+    #  - ./ugc/src:/ugc
     expose:
       - 8000
 

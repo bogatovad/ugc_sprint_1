@@ -32,6 +32,7 @@ class EventService:
     @staticmethod   
     def _get_key(event):
         key = f'{event.user_id}:{event.movie_id}' if event.movie_id else event.user_id
+        return key
  
     
     def _get_topic(self, event):
