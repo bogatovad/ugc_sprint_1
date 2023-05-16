@@ -1,10 +1,11 @@
 import uvicorn
+from aiokafka import AIOKafkaProducer
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from api.v1.views import router
 from core.config import settings
-from db.kafka_producer import producer
+from db import kafka
 
 app = FastAPI(
     title=settings.project_name,
@@ -15,14 +16,16 @@ app = FastAPI(
 
 
 @app.on_event('startup')
-def start_producer():
-    producer.start()
+async def start_producer():
+    kafka.kafka = AIOKafkaProducer(
+        bootstrap_servers=f'{settings.kafka_host}:{settings.kafka_port}')
+    kafka.kafka.client.add_topic(settings.kafka_topic)
+    await kafka.kafka.start()
 
 
 @app.on_event('shutdown')
-def stop_producer():
-    producer.stop()
-
+async def stop_producer():
+    await kafka.kafka.stop()
 
 app.include_router(router, prefix='/api/v1', tags=['views'])
 

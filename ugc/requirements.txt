@@ -1,3 +1,4 @@
+aiokafka
 fastapi==0.61.1
 orjson==3.8.5
 pydantic==1.9.0

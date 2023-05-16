@@ -22,7 +22,9 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://localhost:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_CREATE_TOPICS: "view_progress:1:1"
+      KAFKA_CREATE_TOPICS: "view_progress"
+    depends_on:
+      - zookeeper-kafka
 
   kafka-ui:
     image: provectuslabs/kafka-ui
@@ -80,7 +82,7 @@ services:
       - zookeeper-click
 
   ugc_api:
-    build: src
+    build: ugc
     container_name: ugc_api
     ports:
       - "8000:8000"
@@ -88,8 +90,8 @@ services:
       - kafka
     env_file:
      - envs/.env
-    volumes:
-      - ./src:/ugc
+    #volumes:
+    #  - ./ugc/src:/ugc
     expose:
       - 8000
 
