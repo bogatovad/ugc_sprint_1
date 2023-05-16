@@ -1,7 +1,6 @@
 from http import HTTPStatus
+
 from fastapi import APIRouter, Depends, Request
-
-
 from models import Event
 from services.events_service import EventService, get_events_service
 

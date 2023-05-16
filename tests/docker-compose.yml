@@ -3,7 +3,7 @@ version: '3'
 services:
   ugc_api:
     build:
-      context: ../src
+      context: ../ugc
     image: ugc-image
     depends_on:
       - kafka

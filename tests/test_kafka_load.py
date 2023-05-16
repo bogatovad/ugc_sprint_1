@@ -1,7 +1,5 @@
-from http import HTTPStatus
-import aiohttp
-import json
 import pytest
+
 
 @pytest.mark.asyncio
 async def test_write_view_progress(client, producer, make_post_request, sample_data):

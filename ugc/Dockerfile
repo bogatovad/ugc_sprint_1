@@ -5,7 +5,7 @@ RUN pip install --upgrade pip
 ARG ROOT_DIR=/ugc
 
 WORKDIR $ROOT_DIR
-
+RUN mkdir /$ROOT_DIR/tests
 RUN groupadd -r ugc && useradd -d $ROOT_DIR -r -g ugc ugc
 
 COPY requirements.txt requirements.txt

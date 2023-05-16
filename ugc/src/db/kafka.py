@@ -1,6 +1,6 @@
 from typing import Optional
-from aiokafka import AIOKafkaProducer
 
+from aiokafka import AIOKafkaProducer
 
 kafka: Optional[AIOKafkaProducer] = None
 

@@ -1,13 +1,12 @@
-from aiokafka import AIOKafkaProducer
-from aiokafka.errors import KafkaError
 from datetime import datetime
 from functools import lru_cache
 
-from db.kafka import get_kafka
-from models import Event, EventPosted
+from aiokafka import AIOKafkaProducer
+from aiokafka.errors import KafkaError
 from core.config import settings
-
+from db.kafka import get_kafka
 from fastapi import Depends
+from models import Event, EventPosted
 
 
 class EventService:
