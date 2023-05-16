@@ -3,6 +3,7 @@ FROM python:3.10.8-slim-bullseye
 RUN pip install --upgrade pip
 
 WORKDIR /ugc
+RUN mkdir /ugc/tests
 RUN groupadd -r ugc && useradd -d /ugc -r -g ugc ugc
 
 COPY requirements.txt requirements.txt

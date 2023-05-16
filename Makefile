@@ -3,3 +3,6 @@ start:
 
 down:
 	docker-compose down
+
+test:
+	cd tests/ && docker-compose down && docker-compose build && docker-compose up tests
