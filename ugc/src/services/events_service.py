@@ -2,6 +2,7 @@ from aiokafka import AIOKafkaProducer
 from aiokafka.errors import KafkaError
 from datetime import datetime
 from functools import lru_cache
+import logging
 
 from db.kafka import get_kafka
 from models import Event, EventPosted
@@ -9,6 +10,8 @@ from core.config import settings
 
 from fastapi import Depends
 
+
+logger = logging.getLogger(__name__)
 
 class EventService:
     """Сервис для записи событий в Kafka"""
@@ -27,7 +30,7 @@ class EventService:
                 topic=topic, key=key.encode(), value=posted_event.json().encode()
             )
         except KafkaError as exc:
-            print(f'Kafka Error: {exc}')
+            logger.error(f'Kafka Error: {exc}')
 
     @staticmethod   
     def _get_key(event):
@@ -39,7 +42,7 @@ class EventService:
         topic = event.type
         print(self.producer.client.cluster.topics)
         if topic not in self.producer.client.cluster.topics():
-            print("Event topic not found in kafka, posting to default topic '%s'", settings.kafka_topic)
+            logger.warning("Event topic not found in kafka, posting to default topic '%s'", settings.kafka_topic)
             topic = settings.kafka_topic
         return topic
 
