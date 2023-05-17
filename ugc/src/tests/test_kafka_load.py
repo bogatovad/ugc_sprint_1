@@ -1,14 +1,28 @@
 from http import HTTPStatus
 
 import pytest
+from models import Event
+
+from .settings import test_settings
 
 
 @pytest.mark.asyncio
-async def test_write_view_progress(client, producer, make_post_request, sample_data):
+async def test_write_view_progress(client, producer, make_post_request, sample_data, clickhouse_conn):
+
     url = "http://ugc_api:8000/api/v1/view_progress"
     # Call the API endpoint with each item in the data list
     for item in sample_data:
         response = await make_post_request(url, data=item.json())
         assert response == HTTPStatus.CREATED
+
+    cursor = clickhouse_conn.cursor()
+    cursor.execute(f'SELECT * FROM {test_settings.clickhouse_table}')
+
+    ch_events = []
+    for row in cursor:
+        ch_events.append(Event(user_id=row[0], movie_id=str(row[1]), movie_timestamp=row[2], type=row[3]))
+
+    assert all(event in sample_data for event in ch_events)
+
 
 

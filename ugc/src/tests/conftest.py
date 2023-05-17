@@ -1,11 +1,10 @@
-import json
-
 import aiohttp
+import clickhouse_driver
 import pytest
 from aiokafka import AIOKafkaProducer
+from db.kafka import get_kafka
 from fastapi.testclient import TestClient
 from models import Event
-from db.kafka import get_kafka
 
 from ..main import app
 
@@ -45,3 +44,18 @@ def make_post_request(session):
             response_data = await response.json()
             return response_data
     return inner
+
+
+@pytest.fixture
+def ch_conn():
+    conn = clickhouse_driver.connect('clickhouse-node1')
+    cursor = conn.cursor()
+
+
+@pytest.fixture(scope="session")
+def clickhouse_conn():
+    conn = clickhouse_driver.connect(host='clickhouse-node1', port=9000)
+    yield conn
+    conn.cursor().execute('TRUNCATE TABLE cinema_analytics.movie_views')
+    conn.close()
+

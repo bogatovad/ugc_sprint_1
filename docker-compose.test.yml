@@ -3,12 +3,10 @@ version: '3'
 services:
   tests:
     image: ugc-image
-#    volumes:
-#      - .:/ugc/tests
-    entrypoint: >
-      sh -c "python3 -m pytest /ugc/tests"
-#      sh -c "pip install -r /ugc/tests/requirements.txt
-#      && python3 -m pytest /ugc/tests"
+    volumes:
+      - .:/ugc/tests
+#    entrypoint: >
+#      sh -c "python3 -m pytest -s /ugc/tests"
     depends_on:
       - kafka
       - ugc_api
