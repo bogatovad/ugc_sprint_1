@@ -10,3 +10,5 @@ async def test_write_view_progress(client, producer, make_post_request, sample_d
     for item in sample_data:
         response = await make_post_request(url, data=item.json())
         assert response == HTTPStatus.CREATED
+
+

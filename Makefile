@@ -5,4 +5,6 @@ down:
 	docker-compose down
 
 test:
-	cd tests/ && docker-compose down && docker-compose build && docker-compose up tests
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml down && \
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml build && \
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml up

@@ -5,7 +5,6 @@ RUN pip install --upgrade pip
 ARG ROOT_DIR=/ugc
 
 WORKDIR $ROOT_DIR
-RUN mkdir /$ROOT_DIR/tests
 RUN groupadd -r ugc && useradd -d $ROOT_DIR -r -g ugc ugc
 
 COPY requirements.txt requirements.txt
@@ -13,7 +12,9 @@ RUN apt-get update && apt-get install -y netcat
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
+ENV PYTHONPATH=$PYTHONPATH:$ROOT_DIR/src
 COPY src/ $ROOT_DIR
+COPY src/tests/ $ROOT_DIR/tests
 COPY entrypoint.sh $ROOT_DIR
 RUN chown ugc:ugc -R $ROOT_DIR
 RUN chmod +x entrypoint.sh
