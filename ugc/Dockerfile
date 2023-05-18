@@ -15,8 +15,9 @@ RUN pip install --upgrade pip \
 ENV PYTHONPATH=$PYTHONPATH:$ROOT_DIR/src
 COPY src/ $ROOT_DIR
 COPY entrypoint.sh $ROOT_DIR
+COPY wait-for-it.sh $ROOT_DIR
 RUN chown ugc:ugc -R $ROOT_DIR
-RUN chmod +x entrypoint.sh
+RUN chmod +x entrypoint.sh && chmod +x wait-for-it.sh
 
 USER ugc
 
