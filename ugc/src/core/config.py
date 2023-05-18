@@ -1,4 +1,9 @@
+from logging import config as logging_config
+
+from core.logger import LOGGING
 from pydantic import BaseSettings, Field
+
+logging_config.dictConfig(LOGGING)
 
 
 class Settings(BaseSettings):
