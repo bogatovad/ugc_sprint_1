@@ -1,11 +1,10 @@
 import uvicorn
 from aiokafka import AIOKafkaProducer
-from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
-
 from api.v1.views import router
 from core.config import settings
 from db import kafka
+from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
 
 app = FastAPI(
     title=settings.project_name,

@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  tests:
+    image: ugc-image
+    volumes:
+      - .:/ugc/tests
+    depends_on:
+      - kafka
+      - ugc_api
+    env_file: ./envs/.env
+    entrypoint: >
+      sh -c "/ugc/wait-for-it.sh ugc_api:8000 && python3 -m pytest"

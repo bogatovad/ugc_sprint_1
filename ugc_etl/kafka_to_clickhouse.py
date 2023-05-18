@@ -1,7 +1,7 @@
-import backoff
-from clickhouse_driver import Client
 import logging
 
+import backoff
+from clickhouse_driver import Client
 from config import settings
 
 logging.basicConfig(level=logging.INFO)

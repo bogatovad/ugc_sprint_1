@@ -84,14 +84,15 @@ services:
   ugc_api:
     build: ugc
     container_name: ugc_api
+    image: ugc-image
     ports:
       - "8000:8000"
     depends_on:
       - kafka
     env_file:
      - envs/.env
-    #volumes:
-    #  - ./ugc/src:/ugc
+    volumes:
+      - ./ugc:/ugc
     expose:
       - 8000
 
