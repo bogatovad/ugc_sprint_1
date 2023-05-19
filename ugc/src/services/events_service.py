@@ -4,9 +4,10 @@ from functools import lru_cache
 
 from aiokafka import AIOKafkaProducer
 from aiokafka.errors import KafkaError
+from fastapi import Depends
+
 from core.config import settings
 from db.kafka import get_kafka
-from fastapi import Depends
 from models import Event, EventPosted
 
 logger = logging.getLogger(__name__)
