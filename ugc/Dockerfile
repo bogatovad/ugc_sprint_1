@@ -22,4 +22,4 @@ RUN chmod +x entrypoint.sh && chmod +x wait-for-it.sh
 USER ugc
 
 ENTRYPOINT ["sh", "entrypoint.sh"]
-CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8000", "main:app"]
+CMD ["gunicorn", "main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000"]
