@@ -109,4 +109,14 @@ services:
     env_file:
      - envs/.env
 
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - ugc_api
+    ports:
+      - "80:80"
+
 
