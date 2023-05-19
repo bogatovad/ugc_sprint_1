@@ -8,13 +8,11 @@ router = APIRouter()
 
 
 @router.post(
-    '/view_progress',
+    "/view_progress",
     description="Получение данных о времени просмотра фильма.",
 )
 async def post_view_progress(
-    request: Request,
-    event: Event,
-    service: EventService = Depends(get_events_service)
+    request: Request, event: Event, service: EventService = Depends(get_events_service)
 ):
     await service.send_event(event)
     return HTTPStatus.CREATED

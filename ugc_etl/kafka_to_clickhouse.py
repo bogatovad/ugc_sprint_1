@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 def init_ch_connection():
     return Client(host=settings.clickhouse_host)
 
+
 def init_clickhouse_db(client):
     client.execute(
         "CREATE DATABASE IF NOT EXISTS cinema_analytics ON CLUSTER company_cluster",
@@ -68,12 +69,12 @@ def migrator():
     ch_client = init_ch_connection()
     init_clickhouse_db(ch_client)
     create_ch_table(ch_client)
-    logging.info('created Clickhouse analytics table')
+    logging.info("created Clickhouse analytics table")
     create_kafka_queue(ch_client)
-    logging.info('created kafka queue table')
+    logging.info("created kafka queue table")
     create_ch_mv(ch_client)
-    logging.info('created materialized view')
+    logging.info("created materialized view")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     migrator()
