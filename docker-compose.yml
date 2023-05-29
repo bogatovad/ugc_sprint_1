@@ -96,6 +96,20 @@ services:
     expose:
       - 8000
 
+  ugc_api_2:
+    build: ugc_2
+    container_name: ugc_api_2
+    ports:
+      - "8090:8090"
+    depends_on:
+      - mongodb
+    env_file:
+     - envs/.env
+    volumes:
+      - ./ugc_2:/ugc
+    expose:
+      - 8090
+
   ugc_etl:
     build: ugc_etl
     container_name: ugc_etl
@@ -109,6 +123,18 @@ services:
     env_file:
      - envs/.env
 
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./mongo:/data/db
+    ports:
+      - "27017:27017"
+    restart: always
+
   nginx:
     image: nginx:latest
     volumes:
@@ -116,6 +142,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
     depends_on:
       - ugc_api
+      - ugc_api_2
     ports:
       - "80:80"
 
