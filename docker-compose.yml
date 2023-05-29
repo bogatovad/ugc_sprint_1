@@ -135,14 +135,15 @@ services:
       - "27017:27017"
     restart: always
 
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-    depends_on:
-      - ugc_api
-    ports:
-      - "80:80"
+#  nginx:
+#    image: nginx:latest
+#    volumes:
+#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+#      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+#    depends_on:
+#      - ugc_api
+#      - ugc_api_2
+#    ports:
+#      - "80:80"
 
 
