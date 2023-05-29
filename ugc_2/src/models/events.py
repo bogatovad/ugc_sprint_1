@@ -17,3 +17,12 @@ class Like(UserEvent):
 class Bookmark(UserEvent):
     status: bool = Field(default=True)
 
+
+class Review(UserEvent):
+    text: str 
+    likes: list | None = Field(default= [], description= "Лайки к рецензии")
+    dislikes: list | None = Field(default= [], description= "Дизлайки к рецензии")
+
+
+class ReviewPosted(Review):
+    created_at : datetime = Field(default=datetime.now())

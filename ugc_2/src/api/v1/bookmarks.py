@@ -27,7 +27,7 @@ async def add_bookmark(
 async def delete_bookmark(
     request: Request, event: Bookmark, service: BookmarkService = Depends(get_events_service)
 ):
-    result = await service.delete(event)
+    result = await service.find_and_delete(event)
     if not result:
         return HTTPStatus.NOT_FOUND
     return HTTPStatus.NO_CONTENT
