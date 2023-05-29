@@ -14,12 +14,8 @@ RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
 COPY src/ $ROOT_DIR
-#COPY entrypoint.sh $ROOT_DIR
-#COPY wait-for-it.sh $ROOT_DIR
-#RUN chown ugc:ugc -R $ROOT_DIR
-#RUN chmod +x entrypoint.sh && chmod +x wait-for-it.sh
+RUN chown ugc:ugc -R $ROOT_DIR
 
-#USER ugc
+USER ugc
 
-#ENTRYPOINT ["sh", "entrypoint.sh"]
 CMD ["python", "src/main.py"]

@@ -30,6 +30,4 @@ async def delete_review(
     request: Request, review_id: str, service: ReviewsService = Depends(get_events_service)
 ):
     result = await service.delete(review_id)
-    if not result:
-        return HTTPStatus.NOT_FOUND
-    return HTTPStatus.NO_CONTENT
+    return HTTPStatus.NO_CONTENT if result else HTTPStatus.NOT_FOUND
