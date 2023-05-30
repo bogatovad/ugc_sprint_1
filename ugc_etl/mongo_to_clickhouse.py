@@ -42,7 +42,7 @@ def mongo_migrator():
     init_clickhouse_db(ch_client)
     create_ch_table(ch_client)
     logging.info("created Clickhouse analytics tables from mongo")
-    
+
 
 if __name__ == "__main__":
     mongo_migrator()
