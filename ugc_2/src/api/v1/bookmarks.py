@@ -16,7 +16,7 @@ async def add_bookmark(
     event: Bookmark,
     service: BookmarkService = Depends(get_events_service),
 ):
-    logger.info(f'request add bookmarks {request}')
+    logger.info(f"request add bookmarks {request}")
     await service.add_event(event)
     return HTTPStatus.CREATED
 
@@ -27,7 +27,7 @@ async def delete_bookmark(
     event: Bookmark,
     service: BookmarkService = Depends(get_events_service),
 ):
-    logger.info(f'request delete bookmarks {request}')
+    logger.info(f"request delete bookmarks {request}")
     result = await service.find_and_delete(event)
     if not result:
         return HTTPStatus.NOT_FOUND
