@@ -17,6 +17,17 @@ class MongoService:
         new_event = await self.collection.find_one({"_id": event.inserted_id})
         return new_event
     
+    async def update(self, source_id, event):
+        await self.collection.find_one_and_update(
+        {
+          "_id": ObjectId(source_id)
+        }, 
+        {
+         "$set": dict(event)
+        })
+        updated_event = await self.collection.find_one({"_id": ObjectId(source_id)})
+        return updated_event
+
     async def delete(self, source_id):
         deleted_event = await self.collection.delete_one({"_id": ObjectId(source_id)})
         return deleted_event
