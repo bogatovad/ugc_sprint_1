@@ -159,3 +159,5 @@ static/
 .idea/
 /.idea/*
 .local
+
+mongo/
