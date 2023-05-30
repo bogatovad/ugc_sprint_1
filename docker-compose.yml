@@ -100,7 +100,7 @@ services:
     build: ugc_2
     container_name: ugc_api_2
     ports:
-      - "8090:8090"
+      - "8090:8080"
     depends_on:
       - mongodb
     env_file:
@@ -108,7 +108,7 @@ services:
     volumes:
       - ./ugc_2:/ugc
     expose:
-      - 8090
+      - 8080
 
   ugc_etl:
     build: ugc_etl
