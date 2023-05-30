@@ -152,6 +152,7 @@ venv
 # media & static
 media/
 static/
+mongo/
 
 .idea/
 /.idea/*
