@@ -1,14 +1,12 @@
 import uvicorn
-from motor.motor_asyncio import AsyncIOMotorClient
-
-from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
-
-from api.v1.likes import router as likes_router
 from api.v1.bookmarks import router as bookmarks_router
+from api.v1.likes import router as likes_router
 from api.v1.reviews import router as reviews_router
 from core.config import settings
 from db import mongodb
+from fastapi import FastAPI
+from fastapi.responses import ORJSONResponse
+from motor.motor_asyncio import AsyncIOMotorClient
 
 import sentry_sdk
 

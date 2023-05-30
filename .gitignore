@@ -160,4 +160,7 @@ static/
 /.idea/*
 .local
 
-mongo/*
+
+mongo/
+ugc/.bash_history
+

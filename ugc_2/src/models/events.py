@@ -8,7 +8,7 @@ class UserEvent(BaseModel):
         ..., description="ID пользователя, от которого получено событие"
     )
     movie_id: str | None = Field(..., description="ID фильма")
-    
+
 
 class Like(UserEvent):
     rating: int = Field(default=10)
@@ -19,10 +19,10 @@ class Bookmark(UserEvent):
 
 
 class Review(UserEvent):
-    text: str 
-    likes: list | None = Field(default= [], description= "Лайки к рецензии")
-    dislikes: list | None = Field(default= [], description= "Дизлайки к рецензии")
+    text: str
+    likes: list | None = Field(default=[], description="Лайки к рецензии")
+    dislikes: list | None = Field(default=[], description="Дизлайки к рецензии")
 
 
 class ReviewPosted(Review):
-    created_at : datetime = Field(default=datetime.now())
+    created_at: datetime = Field(default=datetime.now())
