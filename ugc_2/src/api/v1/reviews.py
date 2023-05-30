@@ -2,6 +2,7 @@ from datetime import datetime
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import Response
 
 from models.events import Review, ReviewPosted
 from services.reviews import ReviewsService, get_events_service, review_serializer
@@ -17,8 +18,24 @@ router = APIRouter()
 async def add_review(
     request: Request, event: Review, service: ReviewsService = Depends(get_events_service)
 ):
-    new_review = await service.add_event(ReviewPosted(**event.dict(), created_at=datetime.now()))
+    new_review = await service.add_event(ReviewPosted(
+        **event.dict(),
+        created_at=datetime.now())
+    )
     review = review_serializer(new_review)
+    return review
+
+
+@router.put(
+    "/reviews/{review_id}",
+    description="Обновить рецензию"
+)
+async def update_review(
+    request: Request, review_id: str, event: Review, 
+    service: ReviewsService = Depends(get_events_service)
+):
+    updated_review = await service.update(review_id, event)
+    review = review_serializer(updated_review)
     return review
 
 
