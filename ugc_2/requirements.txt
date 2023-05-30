@@ -7,3 +7,4 @@ uvicorn==0.12.2
 flake8==4.0
 isort==5.10.1
 python-dotenv==1.0.0
+sentry-sdk[fastapi]

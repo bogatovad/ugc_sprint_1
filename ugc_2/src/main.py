@@ -10,6 +10,14 @@ from api.v1.reviews import router as reviews_router
 from core.config import settings
 from db import mongodb
 
+import sentry_sdk
+
+
+sentry_sdk.init(
+    dsn="https://c61890820d1149d8a3d17f062e92404c@o570611.ingest.sentry.io/4505269445263360",
+    traces_sample_rate=1.0,
+)
+
 app = FastAPI(
     title=settings.project_name,
     docs_url="/api/openapi",
@@ -28,6 +36,12 @@ async def startup():
 app.include_router(likes_router, prefix="/api/v1", tags=["likes"])
 app.include_router(bookmarks_router, prefix="/api/v1", tags=["bookmarks"])
 app.include_router(reviews_router, prefix="/api/v1", tags=["reviews"])
+
+
+@app.get("/sentry-debug")
+async def trigger_error():
+    division_by_zero = 1 / 0
+
 
 if __name__ == "__main__":
     uvicorn.run(
