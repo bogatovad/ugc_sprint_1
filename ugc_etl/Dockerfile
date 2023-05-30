@@ -12,4 +12,4 @@ RUN pip install --upgrade pip \
 
 COPY .. .
 
-CMD python3 kafka_to_clickhouse.py
+CMD python3 migrator.py

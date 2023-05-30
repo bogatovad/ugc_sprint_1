@@ -5,7 +5,7 @@ from fastapi import Depends
 
 from .mongo_service import MongoService
 from db.mongodb import get_mongo
-from models.events import ReviewPosted
+from core.config import settings
 
 
 
@@ -27,4 +27,4 @@ class ReviewsService(MongoService):
 
 @lru_cache()
 def get_events_service(mongo: AsyncIOMotorClient = Depends(get_mongo)) -> ReviewsService:
-    return ReviewsService("ugc_movies", "reviews", mongo)
+    return ReviewsService(settings.mongo_dbname, "reviews", mongo)

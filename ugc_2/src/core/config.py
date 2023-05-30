@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     port: int = Field(8080, env="UGC_2_PORT")
     mongo_host: str = Field("mongodb", env="MONGO_HOST")
     mongo_port: int = Field(27017, env="MONGO_PORT")
+    mongo_dbname: str = Field("ugc_movies", env="MONGO_DBNAME")
     
     class Config:
         env_file = "envs/.env"
