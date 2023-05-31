@@ -3,10 +3,6 @@ name: UGC service workflow
 on:
   pull_request:
     branches: [ main ]
-  push:
-    branches:
-      - ${{ github.ref }}
-    if: "!github.event.head_commit.message =~ /Merge pull request|#skip-ci/i"
 
 
 jobs:
