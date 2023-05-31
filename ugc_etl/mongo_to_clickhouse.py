@@ -27,10 +27,10 @@ def create_ch_table(client):
         f"""CREATE TABLE IF NOT EXISTS {settings.clickhouse_dbname}.ratings(
         user_id String,
         movie_id String,
-        rating Int32       
+        rating Int32
         )
         Engine=MongoDB(
-        '{settings.mongo_host}:{settings.mongo_port}', 
+        '{settings.mongo_host}:{settings.mongo_port}',
         '{settings.mongo_dbname}',
         'likes', '', '');"""
     )
