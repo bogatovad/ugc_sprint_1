@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Request
 from models.events import Review, ReviewPosted
 from services.reviews import (ReviewsService, get_events_service,
                               review_serializer)
+from core.config import logger
 
 router = APIRouter()
 
@@ -18,6 +19,7 @@ async def add_review(
     event: Review,
     service: ReviewsService = Depends(get_events_service),
 ):
+    logger.info(f"request add review {request}")
     new_review = await service.add_event(
         ReviewPosted(**event.dict(), created_at=datetime.now())
     )
@@ -32,6 +34,7 @@ async def update_review(
     event: Review,
     service: ReviewsService = Depends(get_events_service),
 ):
+    logger.info(f"request update review {request}")
     updated_review = await service.update(review_id, event)
     review = review_serializer(updated_review)
     return review
@@ -43,5 +46,6 @@ async def delete_review(
     review_id: str,
     service: ReviewsService = Depends(get_events_service),
 ):
+    logger.info(f"request delete review {request}")
     result = await service.delete(review_id)
     return HTTPStatus.NO_CONTENT if result else HTTPStatus.NOT_FOUND
