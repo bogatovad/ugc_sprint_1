@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Request
 from models.events import Review, ReviewPosted
 from services.reviews import (ReviewsService, get_events_service,
                               review_serializer)
+from core.config import logger
 
 router = APIRouter()
 
