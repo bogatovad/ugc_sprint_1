@@ -2,9 +2,9 @@ from datetime import datetime
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import Response
 from models.events import Review, ReviewPosted
-from services.reviews import ReviewsService, get_events_service, review_serializer
+from services.reviews import (ReviewsService, get_events_service,
+                              review_serializer)
 
 router = APIRouter()
 
