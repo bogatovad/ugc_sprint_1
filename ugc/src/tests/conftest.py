@@ -47,12 +47,6 @@ def make_post_request(session):
     return inner
 
 
-@pytest.fixture
-def ch_conn():
-    conn = clickhouse_driver.connect("clickhouse-node1")
-    cursor = conn.cursor()
-
-
 @pytest.fixture(scope="session")
 def clickhouse_conn():
     conn = clickhouse_driver.connect(host="clickhouse-node1", port=9000)

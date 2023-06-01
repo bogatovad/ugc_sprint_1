@@ -29,7 +29,7 @@ def create_ch_table(client):
         movie_id String,
         movie_timestamp Int64,
         type String,
-        created_at Datetime         
+        created_at Datetime
         )
         Engine=MergeTree()
         PARTITION BY toYYYYMMDD(created_at)

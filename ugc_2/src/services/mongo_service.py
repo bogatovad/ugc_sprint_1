@@ -1,5 +1,4 @@
 from bson import ObjectId
-from db.mongodb import get_mongo
 from motor.motor_asyncio import AsyncIOMotorClient
 
 
