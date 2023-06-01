@@ -43,7 +43,7 @@ services:
     hostname: zookeeper-click
 
   clickhouse-node1:
-    image: yandex/clickhouse-server:20.4
+    image: clickhouse/clickhouse-server
     container_name: clickhouse-node1
     hostname: clickhouse-node1
     ports:
@@ -55,7 +55,7 @@ services:
       - zookeeper-click
 
   clickhouse-node2:
-    image: yandex/clickhouse-server:20.4
+    image: clickhouse/clickhouse-server
     container_name: clickhouse-node2
     hostname: clickhouse-node2
     volumes:
@@ -64,7 +64,7 @@ services:
       - zookeeper-click
 
   clickhouse-node3:
-    image: yandex/clickhouse-server:20.4
+    image: clickhouse/clickhouse-server
     container_name: clickhouse-node3
     hostname: clickhouse-node3
     volumes:
@@ -73,7 +73,7 @@ services:
       - zookeeper-click
 
   clickhouse-node4:
-    image: yandex/clickhouse-server:20.4
+    image: clickhouse/clickhouse-server
     container_name: clickhouse-node4
     hostname: clickhouse-node4
     volumes:
@@ -96,11 +96,26 @@ services:
     expose:
       - 8000
 
+  ugc_api_2:
+    build: ugc_2
+    container_name: ugc_api_2
+    ports:
+      - "8090:8080"
+    depends_on:
+      - mongodb
+    env_file:
+     - envs/.env
+    volumes:
+      - ./ugc_2:/ugc
+    expose:
+      - 8080
+
   ugc_etl:
     build: ugc_etl
     container_name: ugc_etl
     depends_on:
       - kafka
+      - mongodb
       - clickhouse-node1
       - clickhouse-node2
       - clickhouse-node3
@@ -109,6 +124,18 @@ services:
     env_file:
      - envs/.env
 
+  mongodb:
+    container_name: mongodb
+    image: mongo:4.2-rc-bionic
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./mongo:/data/db
+    ports:
+      - "27017:27017"
+    restart: always
+
   nginx:
     image: nginx:latest
     volumes:
@@ -116,6 +143,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
     depends_on:
       - ugc_api
+      - ugc_api_2
     ports:
       - "80:80"
 

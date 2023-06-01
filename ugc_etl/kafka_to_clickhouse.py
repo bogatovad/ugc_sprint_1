@@ -18,18 +18,18 @@ def init_ch_connection():
 
 def init_clickhouse_db(client):
     client.execute(
-        "CREATE DATABASE IF NOT EXISTS cinema_analytics ON CLUSTER company_cluster",
+        f"CREATE DATABASE IF NOT EXISTS {settings.clickhouse_dbname}",
     )
 
 
 def create_ch_table(client):
     client.execute(
-        """CREATE TABLE IF NOT EXISTS cinema_analytics.movie_views ON CLUSTER company_cluster(
+        f"""CREATE TABLE IF NOT EXISTS {settings.clickhouse_dbname}.movie_views(
         user_id String,
         movie_id String,
         movie_timestamp Int64,
         type String,
-        created_at Datetime         
+        created_at Datetime
         )
         Engine=MergeTree()
         PARTITION BY toYYYYMMDD(created_at)
@@ -39,7 +39,7 @@ def create_ch_table(client):
 
 def create_kafka_queue(client):
     client.execute(
-        f"""CREATE TABLE IF NOT EXISTS cinema_analytics.kafka_movie_views(
+        f"""CREATE TABLE IF NOT EXISTS {settings.clickhouse_dbname}.kafka_movie_views(
             user_id String,
             movie_id String,
             movie_timestamp Int64,
@@ -59,12 +59,13 @@ def create_kafka_queue(client):
 
 def create_ch_mv(client):
     client.execute(
-        """CREATE MATERIALIZED VIEW IF NOT EXISTS cinema_analytics.mv_kafka_movie_views TO cinema_analytics.movie_views AS
-            SELECT * FROM cinema_analytics.kafka_movie_views;"""
+        f"""CREATE MATERIALIZED VIEW IF NOT EXISTS {settings.clickhouse_dbname}.mv_kafka_movie_views
+        TO {settings.clickhouse_dbname}.movie_views AS
+        SELECT * FROM {settings.clickhouse_dbname}.kafka_movie_views;"""
     )
 
 
-def migrator():
+def kafka_migrator():
     """Осущетсвляет интеграцию Kafka и Clickhouse"""
     ch_client = init_ch_connection()
     init_clickhouse_db(ch_client)
@@ -77,4 +78,4 @@ def migrator():
 
 
 if __name__ == "__main__":
-    migrator()
+    kafka_migrator()

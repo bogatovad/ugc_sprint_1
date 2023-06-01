@@ -1,0 +1,8 @@
+aiokafka==0.8.0
+fastapi==0.95.2
+motor==3.1.2
+orjson==3.8.5
+pydantic==1.9.0
+uvicorn==0.12.2
+flake8==4.0
+isort==5.10.1
