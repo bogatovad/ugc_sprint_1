@@ -1,4 +1,5 @@
 from logging import config as logging_config
+import logging
 
 from core.logger import LOGGING
 from pydantic import BaseSettings, Field
@@ -7,7 +8,6 @@ import logstash
 
 logging_config.dictConfig(LOGGING)
 
-import logging
 
 logger = logging.getLogger(__name__)
 logstash_handler = logstash.LogstashHandler("logstash", 5044, version=1)
