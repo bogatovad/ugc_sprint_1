@@ -1,8 +1,10 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from models.events import Bookmark
 from services.bookmarks import BookmarkService, get_events_service
+from core.config import logger
+from core.error import DocumentExistsException
 
 router = APIRouter()
 
@@ -17,7 +19,10 @@ async def add_bookmark(
     service: BookmarkService = Depends(get_events_service),
 ):
     logger.info(f"request add bookmarks {request}")
-    await service.add_event(event)
+    try:
+        await service.add_event(event)
+    except DocumentExistsException:
+        raise HTTPException(status_code=HTTPStatus.CONFLICT)
     return HTTPStatus.CREATED
 
 

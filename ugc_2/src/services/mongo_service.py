@@ -1,6 +1,7 @@
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 
+from core.error import DocumentExistsException
 
 class MongoService:
     """Сервис для сохранения событий в MongoDB"""
@@ -11,7 +12,10 @@ class MongoService:
         self.db = self.client[dbname]
         self.collection = self.db.get_collection(collection)
 
+
     async def add_event(self, event) -> dict:
+        if self.collection.find_one({"user_id": event.user_id, "movie_id": event.movie_id}):
+            raise DocumentExistsException
         event = await self.collection.insert_one(event.dict())
         new_event = await self.collection.find_one({"_id": event.inserted_id})
         return new_event

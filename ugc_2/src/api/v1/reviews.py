@@ -1,11 +1,12 @@
 from datetime import datetime
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from models.events import Review, ReviewPosted
 from services.reviews import (ReviewsService, get_events_service,
                               review_serializer)
 from core.config import logger
+from core.error import DocumentExistsException
 
 router = APIRouter()
 
@@ -20,9 +21,12 @@ async def add_review(
     service: ReviewsService = Depends(get_events_service),
 ):
     logger.info(f"request add review {request}")
-    new_review = await service.add_event(
-        ReviewPosted(**event.dict(), created_at=datetime.now())
-    )
+    try:
+        new_review = await service.add_event(
+            ReviewPosted(**event.dict(), created_at=datetime.now())
+        )
+    except DocumentExistsException:
+        raise HTTPException(status_code=HTTPStatus.CONFLICT)
     review = review_serializer(new_review)
     return review
 
