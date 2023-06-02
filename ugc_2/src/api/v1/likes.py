@@ -18,7 +18,10 @@ async def add_like(
     event: Like,
     service: UserLikeService = Depends(get_events_service),
 ):
-    logger.info(f"request add like {request}")
+    extra = {
+        "tag": "fast_api_app"
+    }
+    logger.info(f"request add like {request}", extra=extra)
     await service.add_event(event)
     return HTTPStatus.CREATED
 
@@ -29,6 +32,9 @@ async def delete_like(
     event: Like,
     service: UserLikeService = Depends(get_events_service),
 ):
-    logger.info(f"request delete like {request}")
+    extra = {
+        "tag": "fast_api_app"
+    }
+    logger.info(f"request delete like {request}", extra=extra)
     result = await service.find_and_delete(event)
     return HTTPStatus.NO_CONTENT if result else HTTPStatus.NOT_FOUND

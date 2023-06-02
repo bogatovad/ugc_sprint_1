@@ -19,7 +19,10 @@ async def add_review(
     event: Review,
     service: ReviewsService = Depends(get_events_service),
 ):
-    logger.info(f"request add review {request}")
+    extra = {
+        "tag": "fast_api_app"
+    }
+    logger.info(f"request add review {request}", extra=extra)
     new_review = await service.add_event(
         ReviewPosted(**event.dict(), created_at=datetime.now())
     )
@@ -34,7 +37,10 @@ async def update_review(
     event: Review,
     service: ReviewsService = Depends(get_events_service),
 ):
-    logger.info(f"request update review {request}")
+    extra = {
+        "tag": "fast_api_app"
+    }
+    logger.info(f"request update review {request}", extra=extra)
     updated_review = await service.update(review_id, event)
     review = review_serializer(updated_review)
     return review
@@ -46,6 +52,9 @@ async def delete_review(
     review_id: str,
     service: ReviewsService = Depends(get_events_service),
 ):
-    logger.info(f"request delete review {request}")
+    extra = {
+        "tag": "fast_api_app"
+    }
+    logger.info(f"request delete review {request}", extra=extra)
     result = await service.delete(review_id)
     return HTTPStatus.NO_CONTENT if result else HTTPStatus.NOT_FOUND
