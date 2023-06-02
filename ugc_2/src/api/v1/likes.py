@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
+from core.config import logger
 from fastapi import APIRouter, Depends, Request
 from models.events import Like
 from services.likes import UserLikeService, get_events_service
-from core.config import logger
-
 
 router = APIRouter()
 
@@ -18,9 +17,7 @@ async def add_like(
     event: Like,
     service: UserLikeService = Depends(get_events_service),
 ):
-    extra = {
-        "tag": "fast_api_app"
-    }
+    extra = {"tag": "fast_api_app"}
     logger.info(f"request add like {request}", extra=extra)
     await service.add_event(event)
     return HTTPStatus.CREATED
@@ -32,9 +29,7 @@ async def delete_like(
     event: Like,
     service: UserLikeService = Depends(get_events_service),
 ):
-    extra = {
-        "tag": "fast_api_app"
-    }
+    extra = {"tag": "fast_api_app"}
     logger.info(f"request delete like {request}", extra=extra)
     result = await service.find_and_delete(event)
     return HTTPStatus.NO_CONTENT if result else HTTPStatus.NOT_FOUND

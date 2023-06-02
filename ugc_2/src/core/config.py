@@ -1,10 +1,9 @@
-from logging import config as logging_config
 import logging
+from logging import config as logging_config
 
+import logstash
 from core.logger import LOGGING
 from pydantic import BaseSettings, Field
-import logstash
-
 
 logging_config.dictConfig(LOGGING)
 
