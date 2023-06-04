@@ -14,7 +14,8 @@ class MongoService:
 
 
     async def add_event(self, event) -> dict:
-        if self.collection.find_one({"user_id": event.user_id, "movie_id": event.movie_id}):
+        res = await self.collection.find_one({"user_id": event.user_id, "movie_id": event.movie_id})
+        if res:    
             raise DocumentExistsException
         event = await self.collection.insert_one(event.dict())
         new_event = await self.collection.find_one({"_id": event.inserted_id})
