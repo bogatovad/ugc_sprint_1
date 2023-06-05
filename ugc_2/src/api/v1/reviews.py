@@ -7,7 +7,8 @@ from core.logger import extra
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi_jwt_auth import AuthJWT
 from models.events import Review, ReviewPosted
-from services.reviews import ReviewsService, get_events_service, review_serializer
+from services.reviews import (ReviewsService, get_events_service,
+                              review_serializer)
 
 router = APIRouter()
 
