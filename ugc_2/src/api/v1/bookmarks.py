@@ -1,5 +1,6 @@
 from http import HTTPStatus
 
+from core.config import logger
 from fastapi import APIRouter, Depends, Request
 from models.events import Bookmark
 from services.bookmarks import BookmarkService, get_events_service
@@ -16,7 +17,8 @@ async def add_bookmark(
     event: Bookmark,
     service: BookmarkService = Depends(get_events_service),
 ):
-    logger.info(f"request add bookmarks {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request add bookmarks {request}", extra=extra)
     await service.add_event(event)
     return HTTPStatus.CREATED
 
@@ -27,7 +29,8 @@ async def delete_bookmark(
     event: Bookmark,
     service: BookmarkService = Depends(get_events_service),
 ):
-    logger.info(f"request delete bookmarks {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request delete bookmark {request}", extra=extra)
     result = await service.find_and_delete(event)
     if not result:
         return HTTPStatus.NOT_FOUND
