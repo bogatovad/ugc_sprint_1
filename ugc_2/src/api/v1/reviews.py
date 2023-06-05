@@ -19,12 +19,12 @@ router = APIRouter()
 async def add_review(
     request: Request,
     event: Review,
-    Authorize: AuthJWT = Depends(),
+    authorize: AuthJWT = Depends(),
     service: ReviewsService = Depends(get_events_service),
 ):
     logger.info(f"request add review {request}", extra=extra)
-    Authorize.fresh_jwt_required()
-    user_id = Authorize.get_jwt_subject()
+    authorize.fresh_jwt_required()
+    user_id = authorize.get_jwt_subject()
     logger.info(f"user {user_id} is authorized", extra=extra)
     try:
         new_review = await service.add_event(
@@ -41,12 +41,12 @@ async def update_review(
     request: Request,
     review_id: str,
     event: Review,
-    Authorize: AuthJWT = Depends(),
+    authorize: AuthJWT = Depends(),
     service: ReviewsService = Depends(get_events_service),
 ):
     logger.info(f"request update review {request}", extra=extra)
-    Authorize.fresh_jwt_required()
-    user_id = Authorize.get_jwt_subject()
+    authorize.fresh_jwt_required()
+    user_id = authorize.get_jwt_subject()
     logger.info(f"user {user_id} is authorized", extra=extra)
     review = await service.find_one(review_id)
     if not review:
@@ -62,12 +62,12 @@ async def update_review(
 async def delete_review(
     request: Request,
     review_id: str,
-    Authorize: AuthJWT = Depends(),
+    authorize: AuthJWT = Depends(),
     service: ReviewsService = Depends(get_events_service),
 ):
     logger.info(f"request delete review {request}", extra=extra)
-    Authorize.fresh_jwt_required()
-    user_id = Authorize.get_jwt_subject()
+    authorize.fresh_jwt_required()
+    user_id = authorize.get_jwt_subject()
     logger.info(f"user {user_id} is authorized", extra=extra)
     review = await service.find_one(review_id)
     if not review:

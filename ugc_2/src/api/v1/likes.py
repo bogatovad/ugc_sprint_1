@@ -18,12 +18,12 @@ router = APIRouter()
 async def add_like(
     request: Request,
     event: Event,
-    Authorize: AuthJWT = Depends(),
+    authorize: AuthJWT = Depends(),
     service: UserLikeService = Depends(get_events_service),
 ):
     logger.info(f"request add like {request}", extra=extra)
-    Authorize.fresh_jwt_required()
-    user_id = Authorize.get_jwt_subject()
+    authorize.fresh_jwt_required()
+    user_id = authorize.get_jwt_subject()
     logger.info(f"user {user_id} is authorized", extra=extra)
     try:
         await service.add_event(Like(user_id=user_id, movie_id=event.movie_id))
@@ -36,12 +36,12 @@ async def add_like(
 async def delete_like(
     request: Request,
     event: Event,
-    Authorize: AuthJWT = Depends(),
+    authorize: AuthJWT = Depends(),
     service: UserLikeService = Depends(get_events_service),
 ):
     logger.info(f"request delete like {request}", extra=extra)
-    Authorize.fresh_jwt_required()
-    user_id = Authorize.get_jwt_subject()
+    authorize.fresh_jwt_required()
+    user_id = authorize.get_jwt_subject()
     logger.info(f"user {user_id} is authorized", extra=extra)
     result = await service.find_and_delete(event.movie_id, user_id)
     return HTTPStatus.NO_CONTENT if result else HTTPStatus.NOT_FOUND
