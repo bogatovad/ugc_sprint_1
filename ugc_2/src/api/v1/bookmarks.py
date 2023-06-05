@@ -1,9 +1,9 @@
 from http import HTTPStatus
 
+from core.config import logger
 from fastapi import APIRouter, Depends, Request
 from models.events import Bookmark
 from services.bookmarks import BookmarkService, get_events_service
-from core.config import logger
 
 router = APIRouter()
 
