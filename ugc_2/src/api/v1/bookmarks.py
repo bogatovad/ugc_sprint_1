@@ -1,14 +1,12 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends, Request, HTTPException
-from fastapi_jwt_auth import AuthJWT
-from models.events import Bookmark, Event
-from core.config import logger
-from fastapi import APIRouter, Depends, Request
-from models.events import Bookmark
-from services.bookmarks import BookmarkService, get_events_service
 from core.config import logger
 from core.error import DocumentExistsException
+from core.logger import extra
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi_jwt_auth import AuthJWT
+from models.events import Bookmark, Event
+from services.bookmarks import BookmarkService, get_events_service
 
 router = APIRouter()
 
@@ -23,10 +21,10 @@ async def add_bookmark(
     Authorize: AuthJWT = Depends(),
     service: BookmarkService = Depends(get_events_service),
 ):
-    extra = {"tag": "fast_api_app"}
     logger.info(f"request add bookmarks {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
+    logger.info(f"user {user_id} is authorized", extra=extra)
     try:
         await service.add_event(Bookmark(user_id=user_id, movie_id=event.movie_id))
     except DocumentExistsException:
@@ -41,9 +39,9 @@ async def delete_bookmark(
     Authorize: AuthJWT = Depends(),
     service: BookmarkService = Depends(get_events_service),
 ):
-    extra = {"tag": "fast_api_app"}
     logger.info(f"request delete bookmark {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
+    logger.info(f"user {user_id} is authorized", extra=extra)
     result = await service.find_and_delete(event.movie_id, user_id)
     return HTTPStatus.NO_CONTENT if result else HTTPStatus.NOT_FOUND
