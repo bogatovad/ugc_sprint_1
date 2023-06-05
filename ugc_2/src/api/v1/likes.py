@@ -7,6 +7,10 @@ from services.likes import UserLikeService, get_events_service
 from core.config import logger
 from core.error import DocumentExistsException
 
+from core.config import logger
+from fastapi import APIRouter, Depends, Request
+from models.events import Like
+from services.likes import UserLikeService, get_events_service
 
 router = APIRouter()
 
@@ -21,7 +25,8 @@ async def add_like(
     Authorize: AuthJWT = Depends(),
     service: UserLikeService = Depends(get_events_service),
 ):
-    logger.info(f"request add like {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request add like {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
     try:
@@ -38,7 +43,8 @@ async def delete_like(
     Authorize: AuthJWT = Depends(),
     service: UserLikeService = Depends(get_events_service),
 ):
-    logger.info(f"request delete like {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request delete like {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
     result = await service.find_and_delete(event.movie_id, user_id)

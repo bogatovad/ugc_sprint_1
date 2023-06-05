@@ -9,6 +9,13 @@ from services.reviews import (ReviewsService, get_events_service,
 from core.config import logger
 from core.error import DocumentExistsException
 
+from core.config import logger
+from fastapi import APIRouter, Depends, Request
+from models.events import Review, ReviewPosted
+from services.reviews import (ReviewsService, get_events_service,
+                              review_serializer)
+
+
 router = APIRouter()
 
 
@@ -22,7 +29,9 @@ async def add_review(
     Authorize: AuthJWT = Depends(),
     service: ReviewsService = Depends(get_events_service),
 ):
-    logger.info(f"request add review {request}")
+
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request add review {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
     try:
@@ -45,7 +54,8 @@ async def update_review(
     Authorize: AuthJWT = Depends(),
     service: ReviewsService = Depends(get_events_service),
 ):
-    logger.info(f"request update review {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request update review {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
     review = await service.find_one(review_id)
@@ -65,7 +75,8 @@ async def delete_review(
     Authorize: AuthJWT = Depends(),
     service: ReviewsService = Depends(get_events_service),
 ):
-    logger.info(f"request delete review {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request delete review {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
     review = await service.find_one(review_id)

@@ -3,6 +3,9 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi_jwt_auth import AuthJWT
 from models.events import Bookmark, Event
+from core.config import logger
+from fastapi import APIRouter, Depends, Request
+from models.events import Bookmark
 from services.bookmarks import BookmarkService, get_events_service
 from core.config import logger
 from core.error import DocumentExistsException
@@ -20,7 +23,8 @@ async def add_bookmark(
     Authorize: AuthJWT = Depends(),
     service: BookmarkService = Depends(get_events_service),
 ):
-    logger.info(f"request add bookmarks {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request add bookmarks {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
     try:
@@ -37,7 +41,8 @@ async def delete_bookmark(
     Authorize: AuthJWT = Depends(),
     service: BookmarkService = Depends(get_events_service),
 ):
-    logger.info(f"request delete bookmarks {request}")
+    extra = {"tag": "fast_api_app"}
+    logger.info(f"request delete bookmark {request}", extra=extra)
     Authorize.fresh_jwt_required()
     user_id = Authorize.get_jwt_subject()
     result = await service.find_and_delete(event.movie_id, user_id)

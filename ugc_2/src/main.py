@@ -1,3 +1,4 @@
+import sentry_sdk
 import uvicorn
 from api.v1.bookmarks import router as bookmarks_router
 from api.v1.likes import router as likes_router
@@ -9,9 +10,6 @@ from fastapi.responses import ORJSONResponse, JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from fastapi_jwt_auth.exceptions import AuthJWTException
 from motor.motor_asyncio import AsyncIOMotorClient
-
-import sentry_sdk
-
 
 sentry_sdk.init(
     dsn="https://c61890820d1149d8a3d17f062e92404c@o570611.ingest.sentry.io/4505269445263360",
@@ -53,6 +51,7 @@ app.include_router(reviews_router, prefix="/api/v1", tags=["reviews"])
 @app.get("/sentry-debug")
 async def trigger_error():
     division_by_zero = 1 / 0
+    return division_by_zero
 
 
 if __name__ == "__main__":
