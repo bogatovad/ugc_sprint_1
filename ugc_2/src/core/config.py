@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     mongo_host: str = Field("mongodb", env="MONGO_HOST")
     mongo_port: int = Field(27017, env="MONGO_PORT")
     mongo_dbname: str = Field("ugc_movies", env="MONGO_DBNAME")
+    authjwt_secret_key: str = Field("super-secret", env="JWT_SECRET_KEY")
 
     class Config:
         env_file = "envs/.env"

@@ -5,8 +5,10 @@ from api.v1.likes import router as likes_router
 from api.v1.reviews import router as reviews_router
 from core.config import settings
 from db import mongodb
-from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse, ORJSONResponse
+from fastapi_jwt_auth import AuthJWT
+from fastapi_jwt_auth.exceptions import AuthJWTException
 from motor.motor_asyncio import AsyncIOMotorClient
 
 sentry_sdk.init(
@@ -20,6 +22,16 @@ app = FastAPI(
     openapi_url="/api/openapi.json",
     default_response_class=ORJSONResponse,
 )
+
+
+@AuthJWT.load_config
+def get_config():
+    return settings
+
+
+@app.exception_handler(AuthJWTException)
+def authjwt_exception_handler(request: Request, exc: AuthJWTException):
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
 
 @app.on_event("startup")

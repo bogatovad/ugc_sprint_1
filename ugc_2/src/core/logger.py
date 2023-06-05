@@ -65,3 +65,5 @@ LOGGING = {
         "handlers": LOG_DEFAULT_HANDLERS,
     },
 }
+
+extra: dict = {"tag": "fast_api_app"}
